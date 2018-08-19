@@ -1,12 +1,14 @@
 let Firebase = require("./Firebase");
 let FirebaseDatabase = require("./FirebaseDatabase");
 let express = require("express");
+let cors = require("cors")
 let app = express();
 
 const bodyParser = require("body-parser")
 
 // User Register
 app.use(bodyParser.json());
+app.use(cors())
 app.post('/user/register', function (request, response) {
     let userData = FirebaseDatabase.registerUser(request.body)
 
@@ -42,7 +44,10 @@ app.post('/conversation', function (request, response) {
 })
 
 // Return conversation
-app.get('/conversation/:id', function (request, response) {
+app.get('/conversation/:id', function (request, response, next) {
+    
+    request.header("Access-Control-Allow-Origin", "*");
+    request.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     conversation = FirebaseDatabase.findById("conversations", request.params.id)
 
     if (conversation === undefined) {
