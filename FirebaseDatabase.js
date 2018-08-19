@@ -20,6 +20,7 @@ exports.test = (referenceName) => {
     }, function (errorObject) {
         console.log("The read failed: " + errorObject.code);
     });
+    return data;
 }
 
 function connectDatabase() {
