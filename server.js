@@ -1,6 +1,11 @@
-var http = require('http');
-http.createServer(function (req, res) {
-    res.writeHead(200, {'Content-Type': 'text/plain'});
-    res.end('Hello World\n');
-}).listen(8080);
-console.log('Server running at http://localhost:8080/');
+let http = require("http");
+let Firebase = require("./Firebase");
+let FirebaseDatabase = require("./FirebaseDatabase");
+
+FirebaseDatabase.save("teste", {teste5: "bombou tbm"});
+
+// //
+// http.createServer(function (req, res) {
+//     res.writeHead(200, {'Content-Type': 'text/json'});
+//     res.end(JSON.stringify(data));
+// }).listen(8080);
