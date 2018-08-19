@@ -45,7 +45,7 @@ app.post('/conversation', function (request, response) {
 
 // Return conversation
 app.get('/conversation/:id', function (request, response, next) {
-    
+
     request.header("Access-Control-Allow-Origin", "*");
     request.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     conversation = FirebaseDatabase.findById("conversations", request.params.id)
@@ -55,6 +55,10 @@ app.get('/conversation/:id', function (request, response, next) {
     }
 
     response.send(conversation)
+})
+
+app.post('/conversation/:id/finish', function (request, response) {
+    response.send(FirebaseDatabase.finishConversation(request.params.id, request.body))
 })
 
 app.listen(8080, function () {

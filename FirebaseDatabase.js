@@ -43,6 +43,10 @@ exports.test = (referenceName) => {
     return data;
 }
 
+exports.finishConversation = (conversationId, requestBody) => {
+    return finishConversation(conversationId, requestBody)
+}
+
 function connectDatabase() {
     database = firebase.firebaseReference().database();
 }
@@ -84,6 +88,13 @@ function createConversation(requestBody) {
 
     reference = getDatabaseReference("conversations/");
     return reference.push(conversation);
+}
+
+function finishConversation(conversationId, requestBody) {
+    reference = getDatabaseReference("conversations/" + conversationId)
+
+    reference.child("status").set("inactive");
+    reference.child("rating").set(requestBody.rating);
 }
 
 function newMessage(conversationId, requestBody) {
