@@ -1,4 +1,5 @@
 let admin = require("firebase-admin");
+// let firebase = require("firebase")
 let serviceAccount = require("./accountCredentials.json");
 
 let firebaseInstance;

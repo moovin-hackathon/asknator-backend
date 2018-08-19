@@ -5,6 +5,30 @@ let app = express();
 
 const bodyParser = require("body-parser")
 
+// User Register
+app.use(bodyParser.json());
+app.post('/user/register', function (request, response) {
+    let userData = FirebaseDatabase.registerUser(request.body)
+
+    if (userData === undefined) {
+        response.status(400)
+    }
+
+    response.send(userData)
+})
+
+// Login
+app.use(bodyParser.json());
+app.post('/user/login', function (request, response) {
+    let dataUser = FirebaseDatabase.login(request.body)
+
+    if (dataUser === undefined) {
+        response.status(400)
+    }
+
+    response.send(dataUser)
+})
+
 // New message
 app.use(bodyParser.json());
 app.post('/conversation/:id/message', function (request, response) {

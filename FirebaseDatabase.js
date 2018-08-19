@@ -24,6 +24,14 @@ exports.newMessage = (conversationId, requestBody) => {
     return newMessage(conversationId, requestBody)
 }
 
+exports.login = (requestBody) => {
+    return login(requestBody)
+}
+
+exports.registerUser = (requestBody) => {
+    return registerUser(requestBody)
+}
+
 exports.test = (referenceName) => {
     refTeste = database.ref(referenceName);
     refTeste.on("value", function(snapshot) {
@@ -86,4 +94,33 @@ function newMessage(conversationId, requestBody) {
 
     reference = getDatabaseReference("conversations/" + conversationId);
     reference.child('messages').push(message);
+}
+
+function login(requestBody) {
+    let dataUser
+
+    getDatabaseReference("users").on("value", function (snap) {
+        snap.forEach(function (child) {
+            if (child.val().email === requestBody.email) {
+                dataUser = child.val()
+            }
+        })
+    })
+
+    return dataUser
+}
+
+function registerUser(requestBody) {
+    let dataUser = {
+        email: requestBody.email,
+        password: requestBody.password,
+        name: requestBody.name,
+        user_knowledge: requestBody.user_knowledge,
+        gender: requestBody.gender
+    }
+
+    reference = getDatabaseReference()
+    let userId = reference.child('users').push(dataUser)
+
+    return userId.key
 }
