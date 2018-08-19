@@ -4,6 +4,8 @@ let database;
 
 let data;
 
+let dataUser;
+
 exports.database = connectDatabase();
 
 exports.databaseReference = (name) => {
@@ -84,7 +86,7 @@ function findById(referenceName, id) {
             this.data = snapshot.child(id).val()
         })
     }
-console.log(this.data)
+
     return this.data
 }
 
@@ -126,21 +128,23 @@ function newMessage(conversationId, requestBody) {
 }
 
 function login(requestBody) {
-    let dataUser
+    var userKey;
 
     getDatabaseReference("users").on("value", function (snap) {
         snap.forEach(function (child) {
             if (child.val().email === requestBody.email && child.val().password === requestBody.password) {
-                dataUser = child.val()
+                this.dataUser = JSON.stringify(child.val())
+                userKey = child.key
             }
         })
     })
 
-    if (dataUser !== undefined) {
-        updateUserAvailability(dataUser.key, true)
+    if (this.dataUser !== undefined) {
+        this.dataUser = JSON.parse(this.dataUser)
+        updateUserAvailability(userKey, true)
     }
 
-    return dataUser
+    return this.dataUser
 }
 
 function registerUser(requestBody) {

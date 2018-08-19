@@ -24,10 +24,6 @@ app.use(bodyParser.json());
 app.post('/user/login', function (request, response) {
     let dataUser = FirebaseDatabase.login(request.body)
 
-    if (dataUser === undefined) {
-        response.status(400)
-    }
-
     response.send(dataUser)
 })
 
