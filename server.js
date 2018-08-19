@@ -31,6 +31,30 @@ app.post('/user/login', function (request, response) {
     response.send(dataUser)
 })
 
+//UserAvailable
+app.use(bodyParser.json());
+app.get('/user/getAvailableUser', function (request, response) {
+    let dataUser = FirebaseDatabase.getAvailableUser(request.body)
+
+    if (dataUser === undefined) {
+        response.status(400)
+    }
+
+    response.send(dataUser)
+})
+
+//UserRecords
+app.use(bodyParser.json());
+app.get('/user/:id/conversation/', function (request, response) {
+    let dataUser = FirebaseDatabase.getUserRecords(request.params)
+
+    if (dataUser === undefined) {
+        response.status(400)
+    }
+
+    response.send(dataUser)
+})
+
 // New message
 app.use(bodyParser.json());
 app.post('/conversation/:id/message', function (request, response) {
