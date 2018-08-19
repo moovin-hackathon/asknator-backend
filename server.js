@@ -85,6 +85,25 @@ app.post('/conversation/:id/finish', function (request, response) {
     response.send(FirebaseDatabase.finishConversation(request.params.id, request.body))
 })
 
-app.listen(8080, function () {
+server = app.listen(8080)
+const io = require("socket.io")(server)
 
-})
+io.on('connection', function(socket){
+    socket.on('chat_message', function(message){
+
+        messageObj = JSON.parse(message)
+        console.log(messageObj.userId);
+        FirebaseDatabase.newMessage(messageObj.conversationId, {
+            userId: messageObj.userId,
+            message: messageObj.message
+        })
+
+        conversation = FirebaseDatabase.findById("conversations", messageObj.conversationId)
+console.log("conv")
+console.log(conversation)
+        if (conversation !== undefined) {
+            socket.emit('return_message', JSON.stringify(conversation))
+        }
+
+    });
+});

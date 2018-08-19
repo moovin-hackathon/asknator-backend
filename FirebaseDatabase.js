@@ -2,6 +2,8 @@ let firebase = require("./Firebase");
 
 let database;
 
+let data;
+
 exports.database = connectDatabase();
 
 exports.databaseReference = (name) => {
@@ -71,15 +73,19 @@ function save(referenceName, data) {
 function findById(referenceName, id) {
     reference = getDatabaseReference(referenceName + "/" + id)
 
-    let data
-
     reference.on("value", function(snapshot) {
-        data = snapshot.val()
+        this.data = snapshot.val()
     }, function (errorObject) {
         return null;
     });
 
-    return data
+    if (this.data === undefined) {
+        getDatabaseReference(referenceName).on("child_added", function(snapshot) {
+            this.data = snapshot.child(id).val()
+        })
+    }
+console.log(this.data)
+    return this.data
 }
 
 function createConversation(requestBody) {
