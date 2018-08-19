@@ -38,11 +38,19 @@ app.post('/conversation/:id/message', function (request, response) {
 // Create conversation
 app.use(bodyParser.json());
 app.post('/conversation', function (request, response) {
+
+    request.header("Access-Control-Allow-Origin", "*");
+    request.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+
     response.send(FirebaseDatabase.createConversation(request.body).key)
 })
 
 // Return conversation
-app.get('/conversation/:id', function (request, response) {
+app.get('/conversation/:id', function (request, response, next) {
+
+    request.header("Access-Control-Allow-Origin", "*");
+    request.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+
     conversation = FirebaseDatabase.findById("conversations", request.params.id)
 
     if (conversation === undefined) {
@@ -50,8 +58,4 @@ app.get('/conversation/:id', function (request, response) {
     }
 
     response.send(conversation)
-})
-
-app.listen(8080, function () {
-    console.log('teste')
 })
