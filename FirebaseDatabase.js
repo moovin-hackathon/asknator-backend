@@ -101,7 +101,7 @@ function login(requestBody) {
 
     getDatabaseReference("users").on("value", function (snap) {
         snap.forEach(function (child) {
-            if (child.val().email === requestBody.email) {
+            if (child.val().email === requestBody.email && child.val().password === requestBody.password) {
                 dataUser = child.val()
             }
         })
